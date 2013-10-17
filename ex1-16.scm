@@ -1,0 +1,6 @@
+(define (iterative-expo b n)
+  (define (iterate a b n)
+    (cond ((= n 0) a)
+          ((even? n) (iterate a (square b) (/ n 2)))
+          (else (iterate (* a b) b (- n 1)))))
+  (iterate 1 b n))
