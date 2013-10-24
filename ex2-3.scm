@@ -32,7 +32,7 @@
           (car (cdr (car r))))))
 
 (define (rect-breadth r)
-  (abs (-(cdr (car (cdr r)))
+  (abs (-(cdr (cdr (car r)))
           (cdr (cdr (cdr r))))))
 
 
