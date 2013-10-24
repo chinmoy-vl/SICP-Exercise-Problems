@@ -1,0 +1,16 @@
+(define (cons x y)
+  (* (expt 2 x) (expt 3 y)))
+
+(define (car x)
+  (define (car-iter a quo)
+    (if (= (remainder quo 2) 0)
+    		(car-iter (+ a 1) (/ quo 2))
+    		a))
+	(car-iter 0 x))
+
+(define (cdr x)
+  (define (cdr-iter a quo)
+    (if (= (remainder quo 3) 0)
+    		(cdr-iter (+ a 1) (/ quo 3))
+    		a))
+	(cdr-iter 0 x))
