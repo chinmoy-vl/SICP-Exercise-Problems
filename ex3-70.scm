@@ -1,29 +1,54 @@
-(define (weighted-pairs s t weight)
-  (define (merge s1 s2)
-    (cond ((stream-null? s1) s2)
-          ((stream-null? s2) s1)
-          (else
-           (let ((s1car (stream-car s1))
+(define ones
+  (cons-stream 1 ones))
+
+(define (add-streams s1 s2)
+  (stream-map + s1 s2))
+
+(define integers 
+  (cons-stream 1 
+                (add-streams ones integers)))
+
+
+(define (merge-weighted proc s1 s2)
+  (cond ((stream-null? s1) s2)
+        ((stream-null? s2) s1)
+        (else
+            (let ((s1car (stream-car s1))
                  (s2car (stream-car s2)))
-             (cond ((<= (weight s1car) (weight s2car))
-                    (cons-stream s1car (merge (stream-cdr s1) s2)))
-                   (else 
-                    (cons-stream s2car (merge s1 (stream-cdr s2)))))))))
-  (cons-stream
-   (list (stream-car s) (stream-car t))
-   (merge 
-    (stream-map (lambda (x) (list (stream-car s) x))
-                (stream-cdr t))
-    (weighted-pairs (stream-cdr s) (stream-cdr t) weight))))
+            (if (proc s1car s2car)
+                (cons-stream s1car 
+                             (merge-weighted proc (stream-cdr s1) s2))
+                (cons-stream s2car 
+                             (merge-weighted proc s1 (stream-cdr s2))))))))
+
+(define (weighted-pairs s1 s2)
+  (cons-stream (list (stream-car s1) (stream-car s2))
+                (merge-weighted
+                  weigh-pairs
+                  (stream-map (lambda (x) (list (stream-car s1) x)) (stream-cdr s2))
+                  (weighted-pairs (stream-cdr s1) (stream-cdr s2)))))
 
 
-(define (weight-a pair)
-  (+ (car pair) (cadr pair)))
 
-(define (integers-from-n n)
-  (cons-stream n (integers-from-n (+ 1 n))))
+(define (weigh-pairs p1 p2)
+  (<= (pair-weight p1) (pair-weight p2)))
 
-(define integers (integers-from-n 1))
+(define (pair-weight pair)
+  (+ (car pair) (cadr pair)))  
 
 
-(define str (weighted-pairs integers integers weight-a))
+(define (generate-stream stream n)
+  (define (generate-stream-iter stream start limit)
+    (cond ((< start limit ) (display (stream-car stream)) 
+                    (newline) 
+                    (generate-stream-iter (stream-cdr stream) (+ start 1) limit))
+        (else (display "done"))))
+  (generate-stream-iter stream 0 n))
+
+
+(define (first-n n)
+  (generate-stream (weighted-pairs integers integers) n))
+
+
+
+
