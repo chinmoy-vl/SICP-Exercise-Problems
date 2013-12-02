@@ -47,7 +47,26 @@
   (generate-stream (pairs odds evens) n))
 
 (define int-pair
-  (pairs integers integers))
+  ;(pairs integers integers))
+  (pairs finite-int finite-int))
+
+(define (stream-enumurate-interval low high)
+  (if (> low high)
+      the-empty-stream
+      (cons-stream
+        low
+        (stream-enumurate-interval (+ low 1) high))))
+
+(define  finite-int
+  (stream-enumurate-interval 1 100))
+
+(define (display-all stream)
+  (if (stream-null? stream)
+      (display "Done")
+      (begin 
+        (display (stream-car stream))
+        (newline)))
+  (display-all (stream-cdr stream)))
 
 
 (define (count-elements-before-pair pair-car pair-cdr stream)  
