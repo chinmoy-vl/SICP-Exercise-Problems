@@ -15,6 +15,29 @@
       (cons-stream (stream-car s1)
       							(interleave s2 (stream-cdr s1)))))
 
+(define (test-stream s t)
+  (interleave
+             (stream-map (lambda (x) (list (stream-car s) x))
+                         (stream-cdr t))
+             (stream-map (lambda (x) (list x (stream-car t)))
+                         (stream-cdr s))))
+
+(define (is-equal? p1 p2)
+  (and (= (car p1) (car p1))
+       (= (cadr p1) (cadr p2))))
+
+
+(define (find-dup s)
+  (stream-map (lambda (x) 
+                      ;(display (cadr x))
+                      (if (is-equal? (stream-car s) x)
+                          (begin  (display "duplicate found")
+                                  (newline)
+                                  (display x))
+                          (display "")))
+              (stream-cdr s)) 
+  (find-dup (stream-cdr s)))
+
 
 (define (pairs2 s t)
   (cons-stream

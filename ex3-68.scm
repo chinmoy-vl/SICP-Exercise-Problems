@@ -10,6 +10,7 @@
     (stream-map (lambda (x) (list (stream-car s) x))
                 t)
     (pairs (stream-cdr s) (stream-cdr t))))
+	;integers))
 
 (define (integers-from-n n)
   (cons-stream n (integers-from-n (+ 1 n))))
@@ -17,6 +18,12 @@
 (define integers (integers-from-n 1))
 
 (define int-pairs (pairs integers integers))
+
+
+;(define (test s t)
+;  (stream-map (lambda (x) (list (stream-car s) x))
+;                t))
+
 
 ;results in infinite loop
 

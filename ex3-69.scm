@@ -59,6 +59,20 @@
 
 (define (first-n n)
   (generate-stream (stream-filter pyhtagorean (triples integers integers integers) ) n))
+  ;(generate-stream (triples integers integers integers) n))
 
 
 
+(define (count-elements-before-pair pair-car pair-cadr pair-caddr stream)  
+  (define (iterate pair-car pair-cadr stream count)
+  (if (> pair-car pair-cadr)
+      (display "Invalid Pair(i,j), i must be <=  j ")
+      (cond ((and (=  pair-car (car (stream-car stream)))
+                  (=  pair-cadr (cadr (stream-car stream)))
+                  (=  pair-caddr (caddr (stream-car stream)))) 
+            (display "Count: ")
+            (display (car count))
+            (display (stream-car stream)))
+            (else
+              (iterate pair-car pair-cadr (stream-cdr stream) (stream-cdr count))))))
+  (iterate pair-car pair-cadr stream integers))
