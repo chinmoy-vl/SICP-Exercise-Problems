@@ -18,6 +18,7 @@
                   (cdr record)
                   #f))
             #f)))
+    
 
     (define (insert! key-1 key-2 value)
       (let ((subtable (check-keys key-1 (cdr local-table) same-key?)))
